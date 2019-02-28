@@ -1,0 +1,40 @@
+{% extends 'core/base.html'%}
+
+{% block title %}Events{% endblock %}
+
+{% block background%} {% load static %}{% static 'core/img/portfolio-bg.jpg' %}{% endblock %}
+{% block header %}
+<h1>Disfruta de tus mejores Eventos</h1>
+<span class="subheading">Eventos</span>
+{% endblock %}
+
+{% block content %}
+{% include 'events/includes/event_menu.html'%}
+	{% for event in event_list|dictsort:"id" reversed %}
+	      <!-- Proyecto -->
+	      <div class="row project"> 
+					
+	      	<div class="col-lg-3 col-md-4 offset-lg-1">
+						{% if event.image %} 
+			      <img class="img-fluid" src="{{event.image.url}}" alt="">
+						{% endif %}	
+	      	</div>
+				
+	        <div class="col-lg-7 col-md-8">
+	      		<h2 class="section-heading title">{{event.title}}</h2>   
+	          <p>{{event.description|striptags|safe|truncatechars:"200"}}</p>
+						<!-- {% if event.link %} -->
+	          <!-- <p><a href="{{event.link}}">Más información</a></p> -->
+						<!-- {% endif %}	 -->
+						
+            <p><a href="{% url 'events:event' event.id event.title|slugify %}">Leer más</a>
+
+							{% if request.user.is_staff %}
+								<a href="{% url 'events:update' event.id %}">Editar</a>
+								<a href="{% url 'events:delete' event.id %}">Eliminar</a>   
+							{% endif %}	   	
+					</div>
+				</div>
+				
+	{% endfor %}
+{% endblock %}
